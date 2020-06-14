@@ -1,64 +1,81 @@
-#primeira lida pra contar quantas linhas tem o texto, eu nao sei porque dava problema
-#mas fazer isso resolveu
-f = open('entrada01.txt','r')
-contador_de_linha=0 #variavel que conta quantas linhas o arquivo tem
-#pra cada linha acresce 1 ao contador assim tendo o num total de linhas
+#primeira lida pra contar quantas linhas tem o texto, por qlqr razao depois que le
+#ficou trancado na ultima linha entao tive que fechar e abrir dnv
+f = open('instrucoes.txt','r')
+contador_de_linha=0
+#p cada linha acresce 1 ao contador assim tendo o num de linhas
 for line in f:
     contador_de_linha +=1
-print (contador_de_linha) #MOSTRA QUANTAS LINHAS FORAM LIDAS, PRA GARANTIR
+print (contador_de_linha)
 f.close()  
-#segunda lida do arquivo
-f = open('entrada01.txt','r')
-#CRIA 2 VETORES COM O TAMANHO DO TEXTO E UM TERCEIRO PRA COMPARAR MUDANCAS
+#SEGUNDA LIDA
+f = open('instrucoes.txt','r')
+#CRIA 2 VETORES COM O TAMANHO DO TEXTO
 instrucoes=[0]*contador_de_linha
 enderecos=[0]*contador_de_linha
-compara=[0]*contador_de_linha
 #PREENCHE ELES COM O CONTEUDO DO ARQUIVO
-for n in range(0,contador_de_linha):
-   a=f.read(3) #LE 3 CARACTERES (INCLUINDO O ESPACO VAZIO)
-   a=int(a,16) #CONVERTE PRA INTEIRO DE BASE HEXADECIMAL
-   enderecos[n]=hex(a)
-   b=f.read(3)
-   b=int(b,16)
-   instrucoes[n]=hex(b)
-   compara[n]=instrucoes[n] #CRIA UMA COPIA DO VETOR DAS INSTRUCOES
-#PRINTA TODOS OS VALORES SEPARADOS PRA TESTAR SE TA TUDO CERTO
-for n in range(0,contador_de_linha):
-    print(enderecos[n]," ",instrucoes[n]) 
-pc=0 #program counter
-z=0 #   variavel auxiliar
-ac=0 #acum
-ci=0 #cont de instrucoes
-#COMECO DAS INSTRUCOES
-print("Input file:",(f.name),"\n") #MOSTRA O NOME DO ARQUIVO
-while(1>0): #SEMPRE VAI EXECUTAR, SAI DO LAÇO COM A FUCNAO HLT
-    e=instrucoes[pc]
-    if(e==hex(0xf0)): #HLT ENCERRA O PROGRAMA
-        ci+=1
-        pc+=1
-        print("HLT")
-        break
 
-    if(e==hex(0x10)): #LDR CARREGA UM VALOR NO AC
-        ci+=1
-        pc+=1
-        z=instrucoes[pc] #z recebe o endereco da instrucao
-        for n in range(contador_de_linha):
-            if(enderecos[n]==z): #procura um endereço condizente
-                ac = instrucoes[n] 
-                pc+=1
-                print("LDR",enderecos[n])
-                break
+for n in range(0,contador_de_linha):
+   a=f.read(3) #pega os valores
+   enderecos[n]=a[0:2]  #corta o espaço em branco
+   instrucoes[n]=f.read(2)
 
-    if(e==hex(0x20)): #STR GUARDA UM VALOR 
-        ci+=1 
-        pc+=1
-        z=instrucoes[pc] 
+
+#AQUI É SÓ UM TESTE PRA VER SE ELE PEGA O VALOR PS. PRA PEGAR OS ENDERECOS PRECISA CONTAR O 
+#ESPACO DEPOIS ENTAO O ENDERECO "10"  É NA VERDADE "10 "
+if(instrucoes[0]=="10"):
+    print("ook")
+if(enderecos[0]=="00"):
+    print("ok2")
+
+#AQUI É O COMECO DO CODIGO DE VERDADE QUE A PRINCIPIO LE TODAS AS LINHAS E TESTA AS INSTRUCOES
+z=0     #VARIAVEL USADA PRA COMPARACOES
+cp=0 #CONTADOR DE ISNTRUCOES
+AC=0 #ACUMULADOR
+e=instrucoes[0] #RECEBE AS INSTRUCOES E ENDERECOS
+while(e!="F0"): #HLT
+    e=instrucoes[cp]
+    if(e=="10"):    #LDR
+        cp+=1
+        z=instrucoes[cp]
         for n in range(contador_de_linha):
-            if(enderecos[n]==z):   
-                instrucoes[n]=ac  
-                pc+=1  
-                print("STR",enderecos[n])
+            if(enderecos[n]==z):
+                AC = instrucoes[n]
+                cp+=1
                 break
+    if(e=="20"):    #STR
+        cp+=1
+    if(e=="30"):    #ADD
+        cp+=1
+    if(e=="40"):    #SUB
+        cp+=1
+    if(e=="50"):    #MUL
+        cp+=1
+    if(e=="60"):    #DIV
+        cp+=1
+    if(e=="70"):    #NOT
+        cp+=1
+    if(e=="80"):    #AND
+        cp+=1
+    if(e=="90"):    #OR
+        cp+=1   
+    if(e=="A0"):    #XOR
+        cp+=1
+    if(e=="B0"):    #JMP
+        cp+=1
+    if(e=="C0"):    #JEQ
+        cp+=1   
+    if(e=="D0"):    #JG
+        cp+=1
+    if(e=="E0"):    #JL
+        cp+=1
+        
+    
+
+   
 
 f.close()
+    
+
+   
+
+    
